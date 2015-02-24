@@ -1,82 +1,50 @@
-angular.module('starter.controllers', [])
+angular.module('ttyl.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+.controller('LoginCtrl', function ($scope, $firebaseAuth, $ionicModal) {
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  }
-})
+    var ref = new Firebase("https://ttyl.firebaseio.com/");
+    var auth = $firebaseAuth(ref);
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('FriendsCtrl', function($scope, Friends) {
-  $scope.friends = Friends.all();
-})
-
-.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-  $scope.friend = Friends.get($stateParams.friendId);
-})
-
-.controller('AccountCtrl', function($scope, $rootScope, $firebaseAuth, $location) {
-
-  var authUser = $firebaseAuth(ref);
-
-  $scope.signin = function(username, password) {
-
-    authUser.$authWithPassword({
-      email: username,
-      password: password
-    }).then(function(authData) {
-      console.log("Signed in as ", authData.uid);
-    }).catch(function(error) {
-      console.log("Authentification failed", error);
+    $ionicModal.fromTemplateUrl('templates/signup.html', {
+        scope: $scope
+    }).then(function (modal) {
+        $scope.modal = modal;
     })
 
-  }
-
-  $scope.signup = function(username, password) {
-
-    var email = this.user.email;
-    var password = this.user.password;
-
-    if(!email || !password) {
-      $rootScope.notify("Please enter valid credentials");
-      return false;
+    $scope.signUp = function (user) {
+        if(user.email && user.password && user.username) {
+            auth.$createUser({
+                email: user.email,
+                password: user.password
+            }).then(function (userData) {
+                alert("New account created successfully!");
+            }).catch(function (error) {
+                alert("Error: " + error);
+            })
+        } else {
+            alert("Fill in all blanks.");
+        }
     }
 
-    authUser.$createUser({
-      email: username,
-      password: password
-    }).then(function(userData) {
-      console.log("User " + userData.uid + " created successfully!!");
-
-      return authUser.$authWithPassword({
-        email: username,
-        password: password
-      });
-    })
-
-    .then(function(authData) {
-      console.log("Signed in as ", authData.uid);
-      $location.path('/account/:userId');
-    }).catch(function(error) {
-      console.log("Authentification failed", error);
-    });
-
-  }
-
-  $scope.settings = {
-    enableFriends: true
-  };
 })
 
-.controller('AccountDetailCtrl', function($scope, $stateParams, Users) {
-  $scope.user = Users.get($stateParams.userId);
+.controller('StatusCtrl', function ($scope) {
+
+})
+
+.controller('RoomCtrl', function ($scope) {
+    
+})
+
+.controller('RoomDetailCtrl', function ($scope) {
+
 });
+
+
+
+// .controller('AccountDetailCtrl', function($scope, $stateParams, Users) {
+//   $scope.user = Users.get($stateParams.userId);
+// });
 
 
 

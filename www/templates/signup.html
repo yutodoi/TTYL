@@ -1,0 +1,42 @@
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-light">
+        <h1 class="title">Create New Account</h1>
+        <button ng-click="modal.hide()" class="button button-clear button-positive">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <div class="list card">
+            <label class="item item-input">
+                <input ng-model="user.email" type="email" placeholder="Email">
+            </label>
+            <label class="item item-input">
+                <input ng-model="user.password" type="password" placeholder="Password">
+            </label>
+            <label class="item item-input">
+                <input ng-model="user.username" type="text" placeholder="Username">
+            </label>
+            <label class="item item-input">
+                <input type="text" placeholder="Team">
+            </label>
+        </div>
+        <div class="list padding">
+            <label class="item item-radio">
+                <input type="radio" name="department">
+                <div class="item-content">WEB</div>
+                <i class="radio-icon ion-checkmark"></i>
+            </label>
+            <label class="item item-radio">
+                <input type="radio" name="department">
+                <div class="item-content">XBOX</div>
+                <i class="radio-icon ion-checkmark"></i>
+            </label>
+            <label class="item item-radio">
+                <input type="radio" name="department">
+                <div class="item-content">HR</div>
+                <i class="radio-icon ion-checkmark"></i>
+            </label>
+        </div>
+        <div class="padding">
+        	<button ng-click="signUp(user)" class="button button-outline button-block icon-left ion-ios7-plus-outline button-positive col-80 col-offset-10">Create New Account</button>
+        </div>
+    </ion-content>
+</ion-modal-view>
