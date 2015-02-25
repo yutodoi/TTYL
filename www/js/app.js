@@ -18,6 +18,11 @@ angular.module('ttyl', ['ionic', 'ttyl.controllers', 'ttyl.services', 'firebase'
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    //logout
+    var ref = new Firebase("https://ttyl.firebaseio.com/");
+    ref.unauth();
+
   });
 })
 
@@ -44,6 +49,16 @@ angular.module('ttyl', ['ionic', 'ttyl.controllers', 'ttyl.services', 'firebase'
       'tab-login': {
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
+      }
+    }
+  })
+
+  .state('tab.logout', {
+    url: '/login/:user_id',
+    views: {
+      'tab-logout': {
+        templateUrl: 'templates/logout.html',
+        controller: 'LogoutCtrl'
       }
     }
   })

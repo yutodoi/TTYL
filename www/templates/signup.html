@@ -15,7 +15,7 @@
                 <input ng-model="user.username" type="text" placeholder="Username">
             </label>
             <label class="item item-input">
-                <input type="text" placeholder="Team">
+                <input ng-model="user.team" type="text" placeholder="Team">
             </label>
         </div>
         <div class="list padding">
@@ -38,5 +38,6 @@
         <div class="padding">
         	<button ng-click="signUp(user)" class="button button-outline button-block icon-left ion-ios7-plus-outline button-positive col-80 col-offset-10">Create New Account</button>
         </div>
+        <pre>{{user|json}}</pre>
     </ion-content>
 </ion-modal-view>
