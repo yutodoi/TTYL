@@ -1,8 +1,23 @@
 angular.module('ttyl.services', [])
 
-// .factory('Users', function ($firebase) {
-//     var 
-// })
+
+.factory('Users', ['$firebase', function ($firebase) {
+
+    var ref = new Firebase(firebaseUrl).child('users');
+    var sync = $firebase(ref);
+
+    var usersObject = sync.$asObject(); 
+
+    return {
+        all: function () {
+            return usersObject;
+        },
+        getLoginUser: function (userId) {
+
+        }
+    }
+
+}])
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array

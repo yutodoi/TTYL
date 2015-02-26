@@ -1,5 +1,7 @@
 // Ionic Starter App
 
+var firebaseUrl = "https://ttyl.firebaseio.com/";
+
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -54,7 +56,7 @@ angular.module('ttyl', ['ionic', 'ttyl.controllers', 'ttyl.services', 'firebase'
   })
 
   .state('tab.logout', {
-    url: '/login/:user_id',
+    url: '/login/:userId',
     views: {
       'tab-logout': {
         templateUrl: 'templates/logout.html',
@@ -83,12 +85,12 @@ angular.module('ttyl', ['ionic', 'ttyl.controllers', 'ttyl.services', 'firebase'
     }
   })
 
-  .state('tab.room-detail', {
-    url: '/room-detail',
+  .state('tab.room-member', {
+    url: '/room/:roomId',
     views: {
-      'tab-room-detail': {
-        templateUrl: 'templates/room-detail.html',
-        controller: 'RoomDetailCtrl'
+      'tab-room-member': {
+        templateUrl: 'templates/room-member.html',
+        controller: 'RoomMemberCtrl'
       }
     }
   })

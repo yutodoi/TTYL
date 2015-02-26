@@ -1,9 +1,8 @@
 angular.module('ttyl.controllers', [])
 
-.controller('LoginCtrl', function ($scope, $firebaseAuth, $ionicModal) {
+.controller('LoginCtrl', function ($scope, $state, $firebaseAuth, $ionicModal) {
 
-    var ref = new Firebase("https://ttyl.firebaseio.com/");
-    var authref = new Firebase("https://ttyl.firebaseio.com/users/");
+    var ref = new Firebase(firebaseUrl);
     var auth = $firebaseAuth(ref);
 
     $ionicModal.fromTemplateUrl('templates/signup.html', {
@@ -19,7 +18,7 @@ angular.module('ttyl.controllers', [])
                 password: user.password
             }).then(function (userData) {
                 alert("New account created successfully!");
-                authref.child(userData.uid).set({
+                ref.child("users").child(userData.uid).set({
                     email: user.email,
                     password: user.password,
                     username: user.username,
@@ -34,13 +33,13 @@ angular.module('ttyl.controllers', [])
         }
     }
 
-    auth.$onAuth(function(authData) {
-        if (authData) {
-            console.log("Logged in as:", authData.uid);
-        } else {
-            console.log("Logged out");
-        }
-    });
+    // auth.$onAuth(function(authData) {
+    //     if (authData) {
+    //         console.log("Logged in as:", authData.uid);
+    //     } else {
+    //         console.log("Logged out");
+    //     }
+    // });
 
     $scope.signIn = function (user) {
         if(user.email && user.password) {
@@ -49,6 +48,8 @@ angular.module('ttyl.controllers', [])
                 password: user.password
             }).then(function (authData) {
                 console.log("Logged in as " + authData.uid);
+                // ref.child("users").child(authData.uid)
+                $state.go('tab.logout');
             }).catch(function (error) {
                 alert("You are not registered." + error.message);
             })
@@ -59,6 +60,10 @@ angular.module('ttyl.controllers', [])
 
 })
 
+.controller('LogoutCtrl', function ($scope, $stateParams, Users) {
+    $scope.users = Users.all();
+})
+
 .controller('StatusCtrl', function ($scope) {
 
 })
@@ -67,8 +72,8 @@ angular.module('ttyl.controllers', [])
     
 })
 
-.controller('RoomDetailCtrl', function ($scope) {
-
+.controller('RoomMemberCtrl', function ($scope, Users) {
+    $scope.users = Users.all();
 });
 
 
