@@ -1,9 +1,8 @@
 angular.module('ttyl.controllers', [])
 
-.controller('LoginCtrl', function ($scope, $state, $firebaseAuth, $ionicModal) {
+.controller('LoginCtrl', function ($scope, fireBaseData, $location, $ionicModal) {
 
-    var ref = new Firebase(firebaseUrl);
-    var auth = $firebaseAuth(ref);
+    $scope.user = fireBaseData.ref().getAuth();
 
     $ionicModal.fromTemplateUrl('templates/signup.html', {
         scope: $scope
@@ -11,57 +10,65 @@ angular.module('ttyl.controllers', [])
         $scope.modal = modal;
     })
 
-    $scope.signUp = function (user) {
-        if(user.email && user.password && user.username) {
-            auth.$createUser({
-                email: user.email,
-                password: user.password
-            }).then(function (userData) {
-                alert("New account created successfully!");
-                ref.child("users").child(userData.uid).set({
-                    email: user.email,
-                    password: user.password,
-                    username: user.username,
-                    team: user.team
-                });
-                $scope.modal.hide();
-            }).catch(function (error) {
-                alert("Error: " + error);
-            })
+    //Sign up
+    $scope.signUp = function (email, password, username, team) {
+        if(email && password && username) {
+            fireBaseData.ref().createUser({
+                email: email,
+                password: password
+            }, function (error, userData) {
+                if (error) {
+                    switch (error.code) {
+                        case "EMAIL_TAKEN":
+                            alert("You already have been registered.");
+                            break;
+                        case "INVALID_EMAIL":
+                            alert("your email is not valid.");
+                            break;
+                        default:
+                            console.log("Error creating user:", error);
+                            alert("Fill in all blanks.");
+                     }
+                } else {
+                    console.log("Successful uid:", userData.uid);
+                    $scope.modal.hide();
+                    fireBaseData.refUsers().child(userData.uid).set({
+                        email: email,
+                        password: password,
+                        username: username,
+                        team: team
+                    });
+                }
+            });
         } else {
             alert("Fill in all blanks.");
         }
     }
 
-    // auth.$onAuth(function(authData) {
-    //     if (authData) {
-    //         console.log("Logged in as:", authData.uid);
-    //     } else {
-    //         console.log("Logged out");
-    //     }
-    // });
-
-    $scope.signIn = function (user) {
-        if(user.email && user.password) {
-            auth.$authWithPassword({
-                email: user.email,
-                password: user.password
-            }).then(function (authData) {
-                console.log("Logged in as " + authData.uid);
-                // ref.child("users").child(authData.uid)
-                $state.go('tab.logout');
-            }).catch(function (error) {
-                alert("You are not registered." + error.message);
+    //Log in
+    $scope.signIn = function (email, password) {
+        if(email && password) {
+            fireBaseData.ref().authWithPassword({
+                email: email,
+                password: password
+            }, function (error, authData) {
+                if (error) {
+                    alert("You are not registered." + error.message);
+                } else {
+                    console.log("Logged in as " + authData.uid);
+                    $scope.user = fireBaseData.ref().getAuth();
+                    $scope.$apply();
+                }
             })
         } else {
             alert("Enter both email and password.");
         }
-    }
+    };
 
 })
 
-.controller('LogoutCtrl', function ($scope, $stateParams, Users) {
-    $scope.users = Users.all();
+.controller('AccountCtrl', function ($scope, $stateParams, Users) {
+    $scope.user = Users.getLoginUser($stateParams.userId);    
 })
 
 .controller('StatusCtrl', function ($scope) {

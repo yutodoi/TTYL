@@ -1,23 +1,38 @@
 angular.module('ttyl.services', [])
 
+.factory('fireBaseData', function ($firebase) {
+    var ref = new Firebase("https://ttyl.firebaseio.com/");
+    var refUsers = new Firebase("https://ttyl.firebaseio.com/users");
+    // var refHistories = new Firebase("https://ttyl.firebaseio.com/histories");
 
-.factory('Users', ['$firebase', function ($firebase) {
+    return {
+        ref: function() {
+            return ref;
+        },
+        refUsers: function() {
+            return refUsers;
+        }
+    }
+})
+
+
+.factory('Users', function (fireBaseData) {
 
     var ref = new Firebase(firebaseUrl).child('users');
     var sync = $firebase(ref);
 
-    var usersObject = sync.$asObject(); 
+    var usersObject = fireBaseData.refUsers().$asObject(); 
 
     return {
         all: function () {
             return usersObject;
         },
         getLoginUser: function (userId) {
-
+            return usersObject[userId];
         }
     }
 
-}])
+})
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array

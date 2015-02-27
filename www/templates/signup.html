@@ -6,16 +6,16 @@
     <ion-content class="padding">
         <div class="list card">
             <label class="item item-input">
-                <input ng-model="user.email" type="email" placeholder="Email">
+                <input ng-model="email" type="email" placeholder="Email">
             </label>
             <label class="item item-input">
-                <input ng-model="user.password" type="password" placeholder="Password">
+                <input ng-model="password" type="password" placeholder="Password">
             </label>
             <label class="item item-input">
-                <input ng-model="user.username" type="text" placeholder="Username">
+                <input ng-model="username" type="text" placeholder="Username">
             </label>
             <label class="item item-input">
-                <input ng-model="user.team" type="text" placeholder="Team">
+                <input ng-model="team" type="text" placeholder="Team">
             </label>
         </div>
         <div class="list padding">
@@ -36,8 +36,7 @@
             </label>
         </div>
         <div class="padding">
-        	<button ng-click="signUp(user)" class="button button-outline button-block icon-left ion-ios7-plus-outline button-positive col-80 col-offset-10">Create New Account</button>
+        	<button ng-click="signUp(email, password, username,team)" class="button button-outline button-block icon-left ion-ios7-plus-outline button-positive col-80 col-offset-10">Create New Account</button>
         </div>
-        <pre>{{user|json}}</pre>
     </ion-content>
 </ion-modal-view>

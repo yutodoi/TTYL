@@ -55,12 +55,12 @@ angular.module('ttyl', ['ionic', 'ttyl.controllers', 'ttyl.services', 'firebase'
     }
   })
 
-  .state('tab.logout', {
-    url: '/login/:userId',
+  .state('tab.account', {
+    url: '/account/:userId',
     views: {
-      'tab-logout': {
-        templateUrl: 'templates/logout.html',
-        controller: 'LogoutCtrl'
+      'tab-account': {
+        templateUrl: 'templates/account.html',
+        controller: 'AccountCtrl'
       }
     }
   })
