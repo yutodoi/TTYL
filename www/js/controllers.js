@@ -1,6 +1,6 @@
 angular.module('ttyl.controllers', [])
 
-.controller('LoginCtrl', function ($scope, fireBaseData, $location, $ionicModal) {
+.controller('LoginCtrl', function ($scope, $state, fireBaseData, Users, $ionicModal) {
 
     $scope.user = fireBaseData.ref().getAuth();
 
@@ -31,13 +31,13 @@ angular.module('ttyl.controllers', [])
                      }
                 } else {
                     console.log("Successful uid:", userData.uid);
-                    $scope.modal.hide();
                     fireBaseData.refUsers().child(userData.uid).set({
                         email: email,
                         password: password,
                         username: username,
                         team: team
                     });
+                    $scope.modal.hide();
                 }
             });
         } else {
@@ -58,6 +58,15 @@ angular.module('ttyl.controllers', [])
                     console.log("Logged in as " + authData.uid);
                     $scope.user = fireBaseData.ref().getAuth();
                     $scope.$apply();
+
+                    var loginUser = fireBaseData.refUsers().once('value', function (snapshot) {
+                        var val = snapshot.child(authData.uid).val();
+                        console.log(val.username);
+                        $state.go('tab.account', {
+                            userId: val.username
+                        });
+                    });
+           
                 }
             })
         } else {

@@ -16,19 +16,15 @@ angular.module('ttyl.services', [])
 })
 
 
-.factory('Users', function (fireBaseData) {
-
-    var ref = new Firebase(firebaseUrl).child('users');
-    var sync = $firebase(ref);
-
-    var usersObject = fireBaseData.refUsers().$asObject(); 
+.factory('Users', function ($firebase, fireBaseData) {
+    var usersObject = $firebase(fireBaseData.refUsers()).$asObject(); 
 
     return {
         all: function () {
             return usersObject;
         },
-        getLoginUser: function (userId) {
-            return usersObject[userId];
+        getLoginUser: function () {
+            return console.log("LoginUserID: " + usersObject.username);
         }
     }
 
